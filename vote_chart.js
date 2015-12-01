@@ -14,7 +14,7 @@ window.onload = function () {
 		{
 			// Change type to "bar", "area", "spline", "pie",etc.
 
-			type: "column",
+			type: "bar",
 			dataPoints: musicians
 		}
 			]

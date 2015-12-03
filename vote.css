@@ -43,18 +43,27 @@ li {
   text-transform: uppercase;
 }
 
-#chart-info {
-  display: flex;
-  margin-top: 30px;
-}
-
 #artistVote{
   margin-left: 450px;
 }
 
+#chart-info {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+#chartContainer {
+  width: 50%;
+  height: 300px;
+  margin: 0 auto;
+  margin-bottom: 20px;
+  border: 10px solid #5a5a5a;
+}
+
 #labels {
   text-align: center;
-  width: 30%;
+  width: 50%;
 }
 
 img {
@@ -65,13 +74,11 @@ img {
   box-shadow: 5px 5px 5px #888888;
 }
 
-#chartContainer {
-  width: 50%;
-  height: 300px;
-  margin: 0 auto;
-  margin-bottom: 20px;
-  border: 10px solid #5a5a5a;
+img:hover {
+  box-shadow: 5px 5px 50px 1px red;
 }
+
+
 
 .droppable {
   padding-bottom: 10px;

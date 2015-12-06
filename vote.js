@@ -25,10 +25,9 @@ var artistTwo = document.getElementById("artistTwo");
 //event listeners to click the images to then be added to the vote tracker
   document.getElementById("artistOne").addEventListener("click", vote);
   document.getElementById("artistTwo").addEventListener("click", vote);
-  //document.getElementById("reset-button").addEventListener("click", )
 }
 
-var musiciansMaster = new Array();//Array that holds names and images
+var musiciansMaster = new Array();//Array that holds names and images. votes, order, DnD, display
   musiciansMaster.push(new Artist("The Beatles", "beatles.jpg"));
   musiciansMaster.push(new Artist("Pink Floyd", "floyd.png"));
   musiciansMaster.push(new Artist("Led Zeppelin", "zep.jpg"));
@@ -40,7 +39,7 @@ var musiciansMaster = new Array();//Array that holds names and images
   musiciansMaster.push(new Artist("Miles Davis", "miles.jpg"));
   musiciansMaster.push(new Artist("Explosions in the Sky", "explosions.jpg"));
 
-var musicians = new Array();//Array that holds names and images
+var musicians = new Array();//Array that holds names and images. votes, order
   musicians.push(new Artist("The Beatles", "beatles.jpg"));
   musicians.push(new Artist("Pink Floyd", "floyd.png"));
   musicians.push(new Artist("Led Zeppelin", "zep.jpg"));
@@ -70,6 +69,11 @@ function artistStorage(event) {
 function loadPage(event) {
   musicians = JSON.parse(localStorage.getItem("musicians"));
 }
+//back-end reset of chart data through console
+function reset() {
+  musicians = musiciansMaster;
+  chart.render();
+}
 
 function vote() {//add vote to tracker and reinitializes image generator
 musicians[this.getAttribute("data-artist")].y++;
@@ -77,10 +81,6 @@ chart.render();
 generateImage();
 }
 
-function reset() {
-  musicians = musiciansMaster;
-  chart.render();
-}
 /*************************************************
 Drag and Drop code
 *************************************************/

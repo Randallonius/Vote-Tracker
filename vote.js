@@ -53,6 +53,7 @@ var musicians = new Array();//Array that holds names and images. votes, order
 
 window.addEventListener("load", generateImage);
 window.addEventListener("load", loadPage);
+
 //show and hide info
 function checkedBox() {
   document.getElementById("toggle").addEventListener("change", "");
@@ -95,7 +96,7 @@ function initializeDragItems() {
   list.addEventListener("change", checkedBox);
   list.innerHTML="";
   for (index=musicians.length-1; index >=0; index--) {
-      list.innerHTML+="<li draggable='true' class='normal' data-index='"+index+"'>"+"<input type='checkbox'>"+musicians[index].name+"</input>"+"</li>"
+      list.innerHTML+="<li draggable='true' class='normal' id='toggle' data-index='"+index+"'>"+"<input type='checkbox'>"+musicians[index].name+"</input>"+"</li>"
   }
 }
 

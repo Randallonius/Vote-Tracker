@@ -1,13 +1,10 @@
+//Object
 var Artist = function(name, image) {
   this.name = name;
   this.image = image;
-  this.votes = 0;
   this.label = name;
   this.y = 0;
 }
-
-
-
 //Generate random images
 generateImage = function () {
 var imageOne = Math.floor(Math.random()*musicians.length);
@@ -18,26 +15,30 @@ while (imageOne == imageTwo) {
        imageTwo = Math.floor(Math.random()*musicians.length);
      }
 var artistOne = document.getElementById("artistOne");
-    artistOne.innerHTML = "<img src='"+musicians[imageOne].image+"'>";
+    artistOne.innerHTML = "<img src='"+musicians[imageOne].image+"'>";//Display image one
     artistOne.setAttribute("data-artist", imageOne);
 var artistTwo = document.getElementById("artistTwo");
-    artistTwo.innerHTML = "<img src='"+musicians[imageTwo].image+"'>";
+    artistTwo.innerHTML = "<img src='"+musicians[imageTwo].image+"'>";//Display image two
     artistTwo.setAttribute("data-artist", imageTwo);
 
 
-
+//event listeners to click the images to then be added to the vote tracker
   document.getElementById("artistOne").addEventListener("click", vote);
   document.getElementById("artistTwo").addEventListener("click", vote);
+  //document.getElementById("reset-button").addEventListener("click", )
 }
 
-
-function vote() {
-console.log(this);
-console.log("clicked item " +this.getAttribute("data-artist"));
-musicians[this.getAttribute("data-artist")].y++;
-chart.render();
-generateImage();
-}
+var musiciansMaster = new Array();//Array that holds names and images
+  musiciansMaster.push(new Artist("The Beatles", "beatles.jpg"));
+  musiciansMaster.push(new Artist("Pink Floyd", "floyd.png"));
+  musiciansMaster.push(new Artist("Led Zeppelin", "zep.jpg"));
+  musiciansMaster.push(new Artist("Real Estate", "real.jpg"));
+  musiciansMaster.push(new Artist("Radiohead", "radiohead.jpg"));
+  musiciansMaster.push(new Artist("Beach House", "bh.jpg"));
+  musiciansMaster.push(new Artist("Pavement", "pavement.jpg"));
+  musiciansMaster.push(new Artist("John Coltrane", "coltrane.jpg"));
+  musiciansMaster.push(new Artist("Miles Davis", "miles.jpg"));
+  musiciansMaster.push(new Artist("Explosions in the Sky", "explosions.jpg"));
 
 var musicians = new Array();//Array that holds names and images
   musicians.push(new Artist("The Beatles", "beatles.jpg"));
@@ -52,3 +53,82 @@ var musicians = new Array();//Array that holds names and images
   musicians.push(new Artist("Explosions in the Sky", "explosions.jpg"));
 
 window.addEventListener("load", generateImage);
+window.addEventListener("load", loadPage);
+//show and hide info
+function checkedBox() {
+  document.getElementById("toggle").addEventListener("change", "");
+  console.log("I'm checked!");
+}
+
+//Persistence save
+window.addEventListener("beforeunload", artistStorage);
+
+function artistStorage(event) {
+  localStorage.setItem("musicians", JSON.stringify(musicians));
+}
+
+function loadPage(event) {
+  musicians = JSON.parse(localStorage.getItem("musicians"));
+}
+
+function vote() {//add vote to tracker and reinitializes image generator
+musicians[this.getAttribute("data-artist")].y++;
+chart.render();
+generateImage();
+}
+
+function reset() {
+  musicians = musiciansMaster;
+  chart.render();
+}
+/*************************************************
+Drag and Drop code
+*************************************************/
+window.addEventListener("load", initializeDragItems);
+
+function initializeDragItems() {
+  var list = document.getElementById("labels");
+  list.addEventListener("dragstart", startDrag);
+  list.addEventListener("dragover", dragOverItem);
+  list.addEventListener("drop", dropItem);
+  list.addEventListener("dragleave", resetStyle);
+  list.addEventListener("change", checkedBox);
+  list.innerHTML="";
+  for (index=musicians.length-1; index >=0; index--) {
+      list.innerHTML+="<li draggable='true' class='normal' data-index='"+index+"'>"+"<input type='checkbox'>"+musicians[index].name+"</input>"+"</li>"
+  }
+}
+
+function startDrag(event) {
+  event.dataTransfer.setData("text/plain", event.target.getAttribute("data-index"));
+}
+
+function dragOverItem(event) {
+  if (event.target.outerHTML!=event.dataTransfer.getData("text")){
+    event.preventDefault();
+    event.target.setAttribute("class", "droppable");
+  }
+}
+
+function dropItem(event) {
+  event.preventDefault();
+  var movedIndex = parseInt(event.dataTransfer.getData("text"));
+  var movedArtist = musicians[movedIndex];
+  insertIndex=parseInt(event.target.getAttribute("data-index"));
+  musicians.splice(insertIndex, 0, movedArtist);
+  if(movedIndex > insertIndex){
+    musicians.splice(movedIndex+1, 1);
+  }else {
+    musicians.splice(movedIndex, 1);
+  }
+  initializeDragItems();
+  for (index=musicians.length-1; index >=0; index--) {
+    musicians[index].x= index;
+  }
+  chart.render();
+}
+
+function resetStyle(event) {
+  var fullList = event.target.parentNode;
+  fullList.innerHTML = fullList.innerHTML.replace("droppable", "normal");
+}
